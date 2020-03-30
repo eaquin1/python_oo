@@ -1,6 +1,6 @@
 """Word Finder: finds random words from a dictionary."""
 import random
-word_list = []
+
 
 class WordFinder:
     """Returns a random word from a input file
@@ -17,23 +17,19 @@ class WordFinder:
     >>> wf.random() in ['cat', 'dog', 'squirrel']
     True
     """
-    def __init__(self, file):
-        self.file = file
-        self.parse_file(file)
-        self.word_list_length()
+    def __init__(self, path):
+        """Read the dictionary and reports # items read"""
+        dict_file = open(path)
+        self.words = self.parse(dict_file)
+        print(f"{len(self.words)} words read")
 
-    def parse_file(self):
-        with open(self.file, 'r') as file:
-            for line in file:
-                line = line.strip()
-                word_list.append(line)
-        
-    
-    def word_list_length(self):
-        print(f"{len(word_list)} words read")
+    def parse(self, dict_file):
+        """Parse dict_file -> list of words"""
+        return [w.strip() for w in dict_file]
 
     def random(self):
-        return random.choice(word_list)
+        """Return random word"""
+        return random.choice(self.words)
 
 class SpecialWordFinder(WordFinder):
     """WordFinder that excludes blank lines and comments
@@ -49,5 +45,6 @@ class SpecialWordFinder(WordFinder):
     >>> sw.random() in ['apple', 'plum', 'grape']
     True
     """
-    def parse_file(self, file):
-        return [w.strip() for w in file if w.strip() and not w.startswith("#")]
+    def parse (self, file):
+        return [w.strip() for w in file 
+        if w.strip() and not w.startswith("#")]
